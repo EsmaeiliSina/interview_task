@@ -1,6 +1,6 @@
 services:
   web:
-    build: .
+    image: ghcr.io/esmaeilisina/interview_task:latest
     expose:
       - "5000"
   nginx:
