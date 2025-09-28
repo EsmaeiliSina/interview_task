@@ -1,0 +1,26 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            if [ ! -d "interview_task" ]; then
+              git clone https://github.com/${{ github.repository }}.git interview_task
+            fi
+            cd interview_task
+            git pull origin main
+            docker-compose down
+            docker-compose up --build -d --remove-orphans
